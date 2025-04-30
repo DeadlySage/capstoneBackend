@@ -1,0 +1,29 @@
+{
+  "name": "capstonebackend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeadlySage/capstoneBackend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeadlySage/capstoneBackend/issues"
+  },
+  "homepage": "https://github.com/DeadlySage/capstoneBackend#readme",
+  "description": "",
+  "dependencies": {
+    "prisma": "^6.7.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.10"
+  }
+}
