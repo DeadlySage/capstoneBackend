@@ -1,8 +1,9 @@
 const router = require("express").Router();
 
-const { getAllUser } = require("./userController");
+const { getAllUser, deleteUser } = require("./userController");
 const middleware = require("./middleware");
 
-router.all("/all", middleware, getAllUser);
+router.get("/all", middleware, getAllUser);
+router.delete("/delete/:id", middleware, deleteUser)
 
 module.exports = router;

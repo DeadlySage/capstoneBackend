@@ -13,6 +13,34 @@ const getAllUser = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.slice(7);
+    const verifiedId = jwt.verify(token, JWT_SECRET);
+
+    if(id !== verifiedId.id) {
+      res.status(401).send({
+        message: "invalid token"
+      })
+    } else {
+      const response = await prisma.user.delete({
+        where: {
+          id
+        }
+      })
+      res.send(204);
+    }
+
+  } catch (error) {
+    res.status(500).send({
+      message: "failed to delete"
+    })
+  }
+}
+
 module.exports = {
   getAllUser,
+  deleteUser,
 };
