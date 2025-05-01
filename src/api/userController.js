@@ -15,32 +15,59 @@ const getAllUser = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const id = req.params.id
+    const id = req.params.id;
     const authHeader = req.headers.authorization;
     const token = authHeader?.slice(7);
     const verifiedId = jwt.verify(token, JWT_SECRET);
 
-    if(id !== verifiedId.id) {
+    if (id !== verifiedId.id) {
       res.status(401).send({
-        message: "invalid token"
-      })
+        message: "invalid token",
+      });
     } else {
       const response = await prisma.user.delete({
         where: {
-          id
-        }
-      })
+          id,
+        },
+      });
       res.send(204);
     }
-
   } catch (error) {
     res.status(500).send({
-      message: "failed to delete"
-    })
+      message: "failed to delete",
+    });
   }
-}
+};
+
+const updateAUser = async (req, res, next) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
+    req.user = jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    return res.status(400).send({ message: "User must be logged in." });
+  }
+  if (req.user?.id !== req.params.id) {
+    res.send("Please log in.");
+  } else {
+    const hashedPass = await bcrypt.hash(req.body.password, 5);
+    const response = await prisma.user.update({
+      where: {
+        id: req.user?.id,
+      },
+      data: {
+        firstname: req.body.firstname,
+        lastname: req.body.firstname,
+        email: req.body.email,
+        password: hashedPass,
+      },
+    });
+    res.status(200).send(response);
+  }
+};
 
 module.exports = {
   getAllUser,
   deleteUser,
+  updateAUser,
 };
