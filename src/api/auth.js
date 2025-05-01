@@ -55,13 +55,9 @@ const userLogIn = async (req, res, next) => {
       expiresIn: "8h",
     });
     const obj = {
+      id:response.id,
       message: "Login successful!",
       token: token,
-      user: {
-        id: response.id,
-        email: response.email,
-        firstname: response.firstname,
-      },
     };
 
     res.send(obj);
