@@ -126,7 +126,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\coursework\\capstoneBackend\\generated\\prisma",
+      "value": "C:\\Users\\shaniqua whitley\\OneDrive\\Documents\\Documents\\capstoneBackend_sw\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -140,7 +140,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\coursework\\capstoneBackend\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\shaniqua whitley\\OneDrive\\Documents\\Documents\\capstoneBackend_sw\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
