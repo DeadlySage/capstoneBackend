@@ -1,8 +1,10 @@
 const router = require("express").Router();
 
-const { getAllUser } = require("./userController");
+const { getAllUser, updateAUser } = require("./userController");
 const middleware = require("./middleware");
 
-router.all("/all", middleware, getAllUser);
+router.get("/all", middleware, getAllUser);
+
+router.put("/update/:id", middleware, updateAUser);
 
 module.exports = router;
