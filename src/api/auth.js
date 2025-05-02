@@ -6,7 +6,7 @@ const createUser = async (req, res, next) => {
   try{ 
 
   
-  const hashedPass = await bcrypt.hash(req.body.password, 5);
+  const hashedPass = await bcrypt.hash(req.body.password, 10);
   const response = await prisma.user.create({
     data: {
       firstname: req.body.firstname,
@@ -68,7 +68,7 @@ const userLogIn = async (req, res, next) => {
 
 const userInfo = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
+    const userId = req.user.id;
 
     const loggedInUser = await prisma.user.findFirst({
       where: {
@@ -86,7 +86,7 @@ const userInfo = async (req, res, next) => {
           lastname: loggedInUser.lastname,
         }
       }
-      res.send(obj);
+     return res.send(obj);
     } else {
       res.status(404).send({ message: "User not found." });
     }
