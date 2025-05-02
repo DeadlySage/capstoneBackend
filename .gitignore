@@ -1,5 +1,8 @@
 package-lock.json
 
+# prisma
+generated
+
 # node
 node_modules
 
