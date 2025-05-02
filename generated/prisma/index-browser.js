@@ -145,6 +145,7 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
+
 exports.Prisma.ModelName = {
   User: 'User'
 };
