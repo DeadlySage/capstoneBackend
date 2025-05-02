@@ -20,4 +20,6 @@ model User {
   lastname  String @db.VarChar(50)
   email     String @unique @db.VarChar(75)
   password  String
+  activated     Boolean?
+  deactivatedOn DateTime?
 }
