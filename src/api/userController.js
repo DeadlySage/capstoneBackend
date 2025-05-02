@@ -38,7 +38,7 @@ const deleteUser = async (req, res, next) => {
     });
   }
 };
-
+//test
 const updateAUser = async (req, res, next) => {
   try {
     const auth = req.headers.authorization;
