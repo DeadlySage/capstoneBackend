@@ -100,6 +100,9 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   activated: 'activated',
   deactivatedOn: 'deactivatedOn'
+  password: 'password',
+  activated: 'activated',
+  deactivatedOn: 'deactivatedOn'
 };
 
 exports.Prisma.SortOrder = {
@@ -110,6 +113,11 @@ exports.Prisma.SortOrder = {
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 exports.Prisma.NullsOrder = {
@@ -141,7 +149,7 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "darwin",
         "native": true
       }
     ],
