@@ -1,5 +1,8 @@
 package-lock.json
 
+# prisma
+generated
+
 # node
 node_modules
 
@@ -16,5 +19,3 @@ node_modules
 
 # enviroment variables
 .env
-
-generated
