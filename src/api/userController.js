@@ -60,6 +60,8 @@ const updateAUser = async (req, res, next) => {
         lastname: req.body.firstname,
         email: req.body.email,
         password: hashedPass,
+        activated: req.body.activated,
+        deactivatedOn: req.body.deactivatedOn,
       },
     });
     res.status(200).send(response);
