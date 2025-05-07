@@ -39,33 +39,6 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-const updateAUser = async (req, res, next) => {
-  try {
-    const auth = req.headers.authorization;
-    const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
-    req.user = jwt.verify(token, JWT_SECRET);
-  } catch (error) {
-    return res.status(400).send({ message: "User must be logged in." });
-  }
-  if (req.user?.id !== req.params.id) {
-    res.send("Please log in.");
-  } else {
-    const hashedPass = await bcrypt.hash(req.body.password, 5);
-    const response = await prisma.user.update({
-      where: {
-        id: req.user?.id,
-      },
-      data: {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        password: hashedPass,
-      },
-    });
-    res.status(200).send(response);
-  }
-};
-
 const getSingleUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
@@ -88,6 +61,35 @@ const getSingleUser = async (req, res, next) => {
     res.send(singleUser);
   } catch (error) {
     next(error);
+  }
+};
+
+const updateAUser = async (req, res, next) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
+    req.user = jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    return res.status(400).send({ message: "User must be logged in." });
+  }
+  if (req.user?.id !== req.params.id) {
+    res.send("Please log in.");
+  } else {
+    const hashedPass = await bcrypt.hash(req.body.password, 5);
+    const response = await prisma.user.update({
+      where: {
+        id: req.user?.id,
+      },
+      data: {
+        firstname: req.body.firstname,
+        lastname: req.body.firstname,
+        email: req.body.email,
+        password: hashedPass,
+        activated: req.body.activated,
+        deactivatedOn: req.body.deactivatedOn,
+      },
+    });
+    res.status(200).send(response);
   }
 };
 
