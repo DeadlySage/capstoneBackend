@@ -4,7 +4,11 @@ const express = require("express");
 
 const createUser = async (req, res, next) => {
   try {
-    const hashedPass = await bcrypt.hash(req.body.password, 5);
+    const hashedPass = await bcrypt.hash(
+      req.body.password,
+      parseInt(process.env.BCRYPT_SALT)
+    );
+
     const response = await prisma.user.create({
       data: {
         firstname: req.body.firstname,
@@ -13,6 +17,7 @@ const createUser = async (req, res, next) => {
         password: hashedPass,
       },
     });
+
     if (response) {
       const token = jwt.sign({ id: response.id }, JWT_SECRET, {
         expiresIn: "8h",
@@ -36,17 +41,26 @@ const createUser = async (req, res, next) => {
 const userLogIn = async (req, res, next) => {
   const response = await prisma.user.findFirst({
     where: {
-      email: req.body.email,
+      AND: [
+        { email: req.body.email },
+        {
+          OR: [{ activated: null }, { activated: true }],
+        },
+      ],
     },
   });
+
   if (!response) {
     return res.status(401).send({ message: "Invalid username or password." }); // 401 Unauthorized
   }
+
   const match = await bcrypt.compare(req.body.password, response.password);
+
   if (match) {
     const token = jwt.sign({ id: response.id }, JWT_SECRET, {
       expiresIn: "8h",
     });
+
     const obj = {
       message: "Login successful!",
       token: token,
@@ -65,8 +79,7 @@ const userLogIn = async (req, res, next) => {
 
 const userInfo = async (req, res, next) => {
   try {
-    const userId = req.user.userId;
-
+    const userId = req.user.id;
     const loggedInUser = await prisma.user.findFirst({
       where: {
         id: userId,
@@ -83,11 +96,11 @@ const userInfo = async (req, res, next) => {
           lastname: loggedInUser.lastname,
         },
       };
+
       res.send(obj);
     } else {
       res.status(404).send({ message: "User not found." });
     }
-    res.send(userId);
   } catch (error) {
     next(error);
   }

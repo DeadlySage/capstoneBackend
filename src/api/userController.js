@@ -6,7 +6,11 @@ const { prisma } = require("../common");
 
 const getAllUser = async (req, res, next) => {
   try {
-    const response = await prisma.user.findMany();
+    const response = await prisma.user.findMany({
+      where: {
+        OR: [{ activated: null }, { activated: true }],
+      },
+    });
     res.status(200).send(response);
   } catch (error) {
     next(error);
@@ -42,11 +46,13 @@ const deleteUser = async (req, res, next) => {
 const getSingleUser = async (req, res, next) => {
   try {
     const { userId } = req.params;
+
     const singleUser = await prisma.user.findUnique({
       where: {
         id: userId,
       },
     });
+
     if (singleUser) {
       const obj = {
         id: singleUser.id,
@@ -54,6 +60,7 @@ const getSingleUser = async (req, res, next) => {
         lastname: singleUser.lastname,
         email: singleUser.email,
       };
+
       res.status(200).send(obj);
     } else {
       res.status(404).send({ message: "User not found." });
@@ -71,10 +78,15 @@ const updateAUser = async (req, res, next) => {
   } catch (error) {
     return res.status(400).send({ message: "User must be logged in." });
   }
+
   if (req.user?.id !== req.params.id) {
     res.send("Please log in.");
   } else {
-    const hashedPass = await bcrypt.hash(req.body.password, 5);
+    const hashedPass = await bcrypt.hash(
+      req.body.password,
+      parseInt(process.env.BCRYPT_SALT)
+    );
+
     const response = await prisma.user.update({
       where: {
         id: req.user?.id,
@@ -88,6 +100,7 @@ const updateAUser = async (req, res, next) => {
         deactivatedOn: req.body.deactivatedOn,
       },
     });
+    
     res.status(200).send(response);
   }
 };
