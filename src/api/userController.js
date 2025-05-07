@@ -81,11 +81,10 @@ const getSingleUser = async (req, res, next) => {
         lastname: singleUser.lastname,
         email: singleUser.email,
       };
-      res.send(obj);
+      res.status(200).send(obj);
     } else {
       res.status(404).send({ message: "User not found." });
     }
-    res.send(singleUser);
   } catch (error) {
     next(error);
   }
