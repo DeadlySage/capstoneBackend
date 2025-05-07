@@ -16,6 +16,7 @@ node_modules
 *.njsproj
 *.sln
 *.sw?
+*.code-workspace
 
 # enviroment variables
 .env

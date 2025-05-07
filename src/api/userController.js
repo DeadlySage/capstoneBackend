@@ -54,11 +54,10 @@ const getSingleUser = async (req, res, next) => {
         lastname: singleUser.lastname,
         email: singleUser.email,
       };
-      res.send(obj);
+      res.status(200).send(obj);
     } else {
       res.status(404).send({ message: "User not found." });
     }
-    res.send(singleUser);
   } catch (error) {
     next(error);
   }
@@ -82,7 +81,7 @@ const updateAUser = async (req, res, next) => {
       },
       data: {
         firstname: req.body.firstname,
-        lastname: req.body.firstname,
+        lastname: req.body.lastname,
         email: req.body.email,
         password: hashedPass,
         activated: req.body.activated,
