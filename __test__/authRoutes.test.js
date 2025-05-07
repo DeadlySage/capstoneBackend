@@ -45,7 +45,7 @@ describe("auth routes", () => {
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Login successful!");
       token = response.body.token;
-      UUID = response.body.id;
+      UUID = response.body.user.id;
     });
 
   it("get info about current user", async () => {

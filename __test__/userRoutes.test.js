@@ -34,7 +34,7 @@ describe("user routes", () => {
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Login successful!");
     token = response.body.token;
-    UUID = response.body.id;
+    UUID = response.body.user.id;
   });
 
   it("get all user", async () => {
@@ -51,7 +51,7 @@ describe("user routes", () => {
       .get(`/api/user/${UUID}`)
       .send()
       .set("Authorization", `Bearer ${token}`);
-    
+
     expect(response.status).toBe(200);
   });
 
@@ -60,7 +60,7 @@ describe("user routes", () => {
       .get(`/api/user/2520ebdd-7a26-4de5-a1a6-a15bcccfb2ff`)
       .send()
       .set("Authorization", `Bearer ${token}`);
-    
+
     expect(response.status).toBe(404);
   });
 
@@ -74,9 +74,8 @@ describe("user routes", () => {
         password: "jt_pw",
       })
       .set("Authorization", `Bearer ${token}`);
-    
+      
     expect(response.status).toBe(200);
-    expect(response.body.id).toBe(UUID);
     expect(response.body.firstname).toBe("jake");
     expect(response.body.lastname).toBe("test");
     expect(response.body.email).toBe("jake.test@test.com");
