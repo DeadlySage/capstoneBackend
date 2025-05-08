@@ -15,11 +15,63 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  firstname     String    @db.VarChar(50)
-  lastname      String    @db.VarChar(50)
-  email         String    @unique @db.VarChar(75)
+  id            String     @id @default(uuid())
+  firstname     String     @db.VarChar(50)
+  lastname      String     @db.VarChar(50)
+  email         String     @unique @db.VarChar(75)
   password      String
   activated     Boolean?
   deactivatedOn DateTime?
+  car           Car[]
+  mechanic      Mechanic[]
+  admin         Admin[]
+}
+
+model Mechanic {
+  id      String    @id @default(uuid())
+  userId  String
+  user    User      @relation(fields: [userId], references: [id])
+  address Address[]
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  street     String   @db.VarChar(50)
+  city       String   @db.VarChar(50)
+  state      String   @db.VarChar(2)
+  postalCode Int
+  mechanicId String
+  mechanic   Mechanic @relation(fields: [mechanicId], references: [id])
+}
+
+model Admin {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Car {
+  vin         String        @id
+  vehicleType String?       @db.VarChar(100)
+  modelYear   Int
+  make        String        @db.VarChar(100)
+  model       String        @db.VarChar(100)
+  bodyClass   String?       @db.VarChar(100)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  appointment Appointment[]
+}
+
+model Service {
+  id          String        @id @default(uuid())
+  type        String        @db.VarChar(100)
+  appointment Appointment[]
+}
+
+model Appointment {
+  id        String  @id @default(uuid())
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  carVin    String
+  car       Car     @relation(fields: [carVin], references: [vin])
 }
