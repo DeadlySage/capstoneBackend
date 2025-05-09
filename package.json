@@ -6,7 +6,7 @@
     "server": "nodemon src/index.js",
     "heroku-postbuild": "npm install && npx prisma migrate deploy && npx prisma generate",
     "test": "jest --runInBand",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --runInBand --watch"
   },
   "repository": {
     "type": "git",
@@ -22,13 +22,15 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.7.0",
+    "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "jest": "^29.7.0",
