@@ -41,6 +41,7 @@ const createCar = async (req, res, next) => {
           make: response.make,
           model: response.model,
           bodyClass: response.bodyClass,
+          carImg: response.carImg,
           userId: userId,
         },
       });
