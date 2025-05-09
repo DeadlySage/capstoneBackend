@@ -44,6 +44,7 @@ model Car {
   make        String        @db.VarChar(100)
   model       String        @db.VarChar(100)
   bodyClass   String?       @db.VarChar(100)
+  carImg      String?
   userId      String
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   appointment Appointment[]

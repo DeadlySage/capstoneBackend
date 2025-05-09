@@ -90,6 +90,7 @@ describe("car routes", () => {
     expect(response.body.vehicleType).toBe(
       "MULTIPURPOSE PASSENGER VEHICLE (MPV)"
     );
+    expect(response.body.carImg).toBe("https://static.nhtsa.gov/images/vehicles/8584_st0640_046.png")
     expect(response.body.userId).toBe(UUID);
   });
 
@@ -106,6 +107,7 @@ describe("car routes", () => {
     expect(response.body.modelYear).toBe(2016);
     expect(response.body.bodyClass).toBe("Convertible/Cabriolet");
     expect(response.body.vehicleType).toBe("PASSENGER CAR");
+    expect(response.body.carImg).toBe(null);
     expect(response.body.userId).toBe(UUID);
   });
 

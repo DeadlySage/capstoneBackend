@@ -1,4 +1,5 @@
 const { prisma } = require("../common");
+const { getVehicleImg, getVehicleId } = require("./nhtsaService");
 const { decodeVin, isValidVin } = require("./vinDecoder");
 
 const createCar = async (req, res, next) => {
@@ -15,7 +16,7 @@ const createCar = async (req, res, next) => {
 
     // calls NHTSA api to get relavant car information
     const vinDecoded = await decodeVin(vin);
-
+    const carImg = await getVehicleImg( await getVehicleId(vinDecoded.make, vinDecoded.model, vinDecoded.modelYear))
     const response = await prisma.car.create({
       data: {
         vin: vin,
@@ -24,6 +25,7 @@ const createCar = async (req, res, next) => {
         make: vinDecoded.make,
         model: vinDecoded.model,
         bodyClass: vinDecoded.bodyClass,
+        carImg: carImg,
         userId: userId,
       },
     });
