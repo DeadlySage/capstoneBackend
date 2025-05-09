@@ -19,9 +19,11 @@ app.get("/", (req, res) => {
 // --- API Router ---
 const apiRouter = require("./api/authRoutes"); // Correct path to the api index routerconst userRoutes = require("./api/userRoutes");
 const userRoutes = require("./api/userRoutes");
+const carRoutes = require("./api/carRoutes");
 
 app.use("/api/auth", apiRouter);
 app.use("/api/user", userRoutes);
+app.use("/api/car", carRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
