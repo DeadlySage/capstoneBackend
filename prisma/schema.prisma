@@ -15,39 +15,26 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(uuid())
-  firstname     String     @db.VarChar(50)
-  lastname      String     @db.VarChar(50)
-  email         String     @unique @db.VarChar(75)
+  id            String    @id @default(uuid())
+  firstname     String    @db.VarChar(50)
+  lastname      String    @db.VarChar(50)
+  email         String    @unique @db.VarChar(75)
   password      String
+  street        String?   @db.VarChar(50)
+  city          String?   @db.VarChar(50)
+  state         String?   @db.VarChar(2)
+  postalCode    Int?
   activated     Boolean?
   deactivatedOn DateTime?
   car           Car[]
-  mechanic      Mechanic[]
-  admin         Admin[]
+  roleId        Int       @default(1)
+  role          Role      @relation(fields: [roleId], references: [id])
 }
 
-model Mechanic {
-  id      String    @id @default(uuid())
-  userId  String
-  user    User      @relation(fields: [userId], references: [id])
-  address Address[]
-}
-
-model Address {
-  id         String   @id @default(uuid())
-  street     String   @db.VarChar(50)
-  city       String   @db.VarChar(50)
-  state      String   @db.VarChar(2)
-  postalCode Int
-  mechanicId String
-  mechanic   Mechanic @relation(fields: [mechanicId], references: [id])
-}
-
-model Admin {
-  id     String @id @default(uuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+model Role {
+  id   Int    @id @default(autoincrement())
+  role String @db.VarChar(50)
+  user User[]
 }
 
 model Car {
@@ -58,7 +45,7 @@ model Car {
   model       String        @db.VarChar(100)
   bodyClass   String?       @db.VarChar(100)
   userId      String
-  user        User          @relation(fields: [userId], references: [id])
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   appointment Appointment[]
 }
 
