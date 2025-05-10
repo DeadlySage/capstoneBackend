@@ -20,6 +20,46 @@ model User {
   lastname      String    @db.VarChar(50)
   email         String    @unique @db.VarChar(75)
   password      String
+  street        String?   @db.VarChar(50)
+  city          String?   @db.VarChar(50)
+  state         String?   @db.VarChar(2)
+  postalCode    Int?
   activated     Boolean?
   deactivatedOn DateTime?
+  car           Car[]
+  roleId        Int       @default(1)
+  role          Role      @relation(fields: [roleId], references: [id])
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  role String @db.VarChar(50)
+  user User[]
+}
+
+model Car {
+  vin         String        @id
+  vehicleType String?       @db.VarChar(100)
+  modelYear   Int
+  make        String        @db.VarChar(100)
+  model       String        @db.VarChar(100)
+  bodyClass   String?       @db.VarChar(100)
+  carImg      String?
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointment Appointment[]
+}
+
+model Service {
+  id          String        @id @default(uuid())
+  type        String        @db.VarChar(100)
+  appointment Appointment[]
+}
+
+model Appointment {
+  id        String  @id @default(uuid())
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  carVin    String
+  car       Car     @relation(fields: [carVin], references: [vin])
 }
