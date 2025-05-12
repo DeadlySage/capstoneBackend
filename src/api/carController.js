@@ -8,7 +8,7 @@ const createCar = async (req, res, next) => {
     const userId = req.user.id;
 
     // check if user enters a valid vin number, if not return error message
-    if (isValidVin(vin) == false) {
+    if (await isValidVin(vin) == false) {
       res.status(422).send({
         message: "invalid vin number",
       });

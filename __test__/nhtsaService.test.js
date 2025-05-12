@@ -1,11 +1,11 @@
 const {
   getVehicleId,
   getVehicleImg,
-  getRecallInfo,
-  getSafetyRating,
+  // getRecallInfo,
+  // getSafetyRating,
 } = require("../src/api/nhtsaService");
 const { response } = require("../src/server");
-let vehicleId = "";
+
 describe("NHTSA Service calls", () => {
   test("get the vehicleId from the make, model and year", async () => {
     const response = await getVehicleId("FIAT", "500X", 2023);
@@ -22,12 +22,11 @@ describe("NHTSA Service calls", () => {
   test("get the vehicleId from the make, model and year", async () => {
     const response = await getVehicleId("JEEP", "GRAND CHEROKEE", 2013);
 
-    vehicleId = response;
     expect(response).toBe(7234);
   });
 
   test("get the link to the img of the car from the vehicleId", async () => {
-    const response = await getVehicleImg(vehicleId);
+    const response = await getVehicleImg(await getVehicleId("JEEP", "GRAND CHEROKEE", 2013));
 
     expect(response).toBe(
       "https://static.nhtsa.gov/images/vehicles/8584_st0640_046.png"
