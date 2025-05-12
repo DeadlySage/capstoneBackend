@@ -5,8 +5,8 @@
   "scripts": {
     "server": "nodemon src/index.js",
     "heroku-postbuild": "npm install && npx prisma migrate deploy && npx prisma generate",
-    "test": "jest --runInBand",
-    "test:watch": "jest --runInBand --watch"
+    "test": "jest --maxWorkers=2",
+    "test:watch": "jest --maxWorkers=2 --watch"
   },
   "repository": {
     "type": "git",
