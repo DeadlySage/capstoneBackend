@@ -86,7 +86,6 @@ const updateAUser = async (req, res, next) => {
       req.body.password,
       parseInt(process.env.BCRYPT_SALT)
     );
-
     const response = await prisma.user.update({
       where: {
         id: req.user?.id,
@@ -98,9 +97,13 @@ const updateAUser = async (req, res, next) => {
         password: hashedPass,
         activated: req.body.activated,
         deactivatedOn: req.body.deactivatedOn,
+        street: req.body.street,
+        city: req.body.city,
+        state: req.body.state,
+        postalCode: req.body.postal,
       },
     });
-    
+
     res.status(200).send(response);
   }
 };
