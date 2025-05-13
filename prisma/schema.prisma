@@ -15,20 +15,22 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  firstname     String    @db.VarChar(50)
-  lastname      String    @db.VarChar(50)
-  email         String    @unique @db.VarChar(75)
+  id            String       @id @default(uuid())
+  firstname     String       @db.VarChar(50)
+  lastname      String       @db.VarChar(50)
+  email         String       @unique @db.VarChar(75)
   password      String
-  street        String?   @db.VarChar(50)
-  city          String?   @db.VarChar(50)
-  state         String?   @db.VarChar(2)
+  street        String?      @db.VarChar(50)
+  city          String?      @db.VarChar(50)
+  state         String?      @db.VarChar(2)
   postalCode    Int?
   activated     Boolean?
   deactivatedOn DateTime?
   car           Car[]
-  roleId        Int       @default(1)
-  role          Role      @relation(fields: [roleId], references: [id])
+  carAccess     CarAccess[]
+  serviceLog    ServiceLog[]
+  roleId        Int          @default(1)
+  role          Role         @relation(fields: [roleId], references: [id])
 }
 
 model Role {
@@ -38,28 +40,51 @@ model Role {
 }
 
 model Car {
-  vin         String        @id
-  vehicleType String?       @db.VarChar(100)
+  vin         String       @id
+  carName     String?      @db.VarChar(50)
+  vehicleType String?      @db.VarChar(100)
   modelYear   Int
-  make        String        @db.VarChar(100)
-  model       String        @db.VarChar(100)
-  bodyClass   String?       @db.VarChar(100)
+  make        String       @db.VarChar(100)
+  model       String       @db.VarChar(100)
+  bodyClass   String?      @db.VarChar(100)
   carImg      String?
   userId      String
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  appointment Appointment[]
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceLog  ServiceLog[]
+  carAccess   CarAccess[]
+  reminder    Reminder[]
 }
 
-model Service {
-  id          String        @id @default(uuid())
-  type        String        @db.VarChar(100)
-  appointment Appointment[]
-}
-
-model Appointment {
-  id        String  @id @default(uuid())
-  serviceId String
-  service   Service @relation(fields: [serviceId], references: [id])
+model Reminder {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tittle    String
+  notes     String?
   carVin    String
-  car       Car     @relation(fields: [carVin], references: [vin])
+  car       Car      @relation(fields: [carVin], references: [vin], onDelete: Cascade)
+}
+
+model CarAccess {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  carVin String
+  car    Car    @relation(fields: [carVin], references: [vin], onDelete: Cascade)
+}
+
+model ServiceLog {
+  id            String   @id @default(uuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  performedAt   DateTime @default(now())
+  mileage       Int
+  serviceBy     String?
+  user          User?    @relation(fields: [serviceBy], references: [id], onDelete: SetNull)
+  serviceCost   Int?
+  serviceType   String   @db.VarChar(100)
+  serviceDetail String?
+  serviceNote   String?
+  carVin        String
+  car           Car      @relation(fields: [carVin], references: [vin], onDelete: Cascade)
 }
