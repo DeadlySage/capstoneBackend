@@ -60,7 +60,7 @@ model Reminder {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   tittle    String
-  notes     String
+  notes     String?
   carVin    String
   car       Car      @relation(fields: [carVin], references: [vin], onDelete: Cascade)
 }
