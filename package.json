@@ -36,5 +36,10 @@
     "jest": "^29.7.0",
     "prisma": "^6.7.0",
     "supertest": "^7.1.0"
-  }
+  },
+  "jest": {
+    "coveragePathIgnorePatterns" : [
+      "<rootDir>/generated"
+    ]
+}
 }
