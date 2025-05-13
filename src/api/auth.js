@@ -94,6 +94,10 @@ const userInfo = async (req, res, next) => {
           email: loggedInUser.email,
           firstname: loggedInUser.firstname,
           lastname: loggedInUser.lastname,
+          street: loggedInUser.street,
+          city: loggedInUser.city,
+          state: loggedInUser.state,
+          postal: loggedInUser.postalCode,
         },
       };
 
