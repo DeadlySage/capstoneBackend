@@ -82,26 +82,42 @@ const updateAUser = async (req, res, next) => {
   if (req.user?.id !== req.params.id) {
     res.send("Please log in.");
   } else {
-    const hashedPass = await bcrypt.hash(
-      req.body.password,
-      parseInt(process.env.BCRYPT_SALT)
-    );
+    const userData = {};
+    const {
+      firstname,
+      lastname,
+      email,
+      password,
+      street,
+      city,
+      state,
+      postalCode,
+      activated,
+      deactivatedOn,
+    } = req.body;
+
+    if (firstname !== undefined || null) userData.firstname = firstname;
+    if (lastname !== undefined || null) userData.lastname = lastname;
+    if (email !== undefined || null) userData.email = email;
+    if (password !== undefined || null) {
+      userData.password = await bcrypt.hash(
+        password,
+        parseInt(process.env.BCRYPT_SALT)
+      );
+    }
+    if (street !== undefined || null) userData.street = street;
+    if (city !== undefined || null) userData.city = city;
+    if (state !== undefined || null) userData.state = state;
+    if (postalCode !== undefined || null) userData.postalCode = postalCode;
+    if (activated !== undefined || null) userData.activated = activated;
+    if (deactivatedOn !== undefined || null)
+      userData.deactivatedOn = deactivatedOn;
+
     const response = await prisma.user.update({
       where: {
         id: req.user?.id,
       },
-      data: {
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        password: hashedPass,
-        activated: req.body.activated,
-        deactivatedOn: req.body.deactivatedOn,
-        street: req.body.street,
-        city: req.body.city,
-        state: req.body.state,
-        postalCode: req.body.postal,
-      },
+      data: userData,
     });
 
     res.status(200).send(response);

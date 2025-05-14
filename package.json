@@ -6,6 +6,7 @@
     "server": "nodemon src/index.js",
     "heroku-postbuild": "npm install && npx prisma migrate deploy && npx prisma generate",
     "test": "jest --maxWorkers=2",
+    "slowTest": "jest --maxWorkers=1",
     "test:watch": "jest --maxWorkers=2 --watch"
   },
   "repository": {
@@ -38,8 +39,8 @@
     "supertest": "^7.1.0"
   },
   "jest": {
-    "coveragePathIgnorePatterns" : [
+    "coveragePathIgnorePatterns": [
       "<rootDir>/generated"
     ]
-}
+  }
 }
