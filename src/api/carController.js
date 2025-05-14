@@ -9,7 +9,7 @@ const createCar = async (req, res, next) => {
 
     // check if user enters a valid vin number, if not return error message
     if (await isValidVin(vin) == false) {
-      res.status(422).send({
+      return res.status(422).send({
         message: "invalid vin number",
       });
     }
@@ -109,7 +109,7 @@ const deleteCar = async (req, res, next) => {
 
     // check if user enters a valid vin number, if not return error message
     if (isValidVin(vin) == false) {
-      res.status(422).send({
+      return res.status(422).send({
         message: "invalid vin number",
       });
     }

@@ -3,7 +3,7 @@ const axios = require("axios");
 const xml2js = require("xml2js");
 const API_URL = process.env.NHTSA_API_URL;
 
-// vin decoder 
+// vin decoder
 const decodeVin = async (vin) => {
   try {
     // calls the NHTSA API
@@ -32,21 +32,25 @@ const decodeVin = async (vin) => {
 
 // check if user entered a valid vin
 const isValidVin = async (vin) => {
-  // cals the NHTSA API
-  const response = await axios.get(
-    `${API_URL}/api/vehicles/decodevinvalues/${vin}`
-  );
+  try {
+    // cals the NHTSA API
+    const response = await axios.get(
+      `${API_URL}/api/vehicles/decodevinvalues/${vin}`
+    );
 
-  // convert xml to json
-  const result = await xml2js.parseStringPromise(response.data, {
-    explicitArray: false,
-  });
+    // convert xml to json
+    const result = await xml2js.parseStringPromise(response.data, {
+      explicitArray: false,
+    });
 
-  // if NHTSA API returns any error code other than 0 it means user entered an invalid vin number
-  const errorCode = result.Response.Results.DecodedVINValues.ErrorCode;
-  if (errorCode == 0) {
-    return true;
-  } else {
+    // if NHTSA API returns any error code other than 0 it means user entered an invalid vin number
+    const errorCode = result.Response.Results.DecodedVINValues.ErrorCode;
+    if (errorCode == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
     return false;
   }
 };
