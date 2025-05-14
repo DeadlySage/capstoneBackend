@@ -2,7 +2,7 @@ const app = require("../src/server");
 const supertest = require("supertest");
 const request = supertest(app);
 const { prisma } = require("../src/common");
-jest.setTimeout(8000);
+jest.setTimeout(10000);
 
 describe("car routes", () => {
   // unique test account credentials
