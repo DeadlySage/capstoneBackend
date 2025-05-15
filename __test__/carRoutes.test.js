@@ -163,6 +163,52 @@ describe("car routes", () => {
     expect(response.body.userId).toBe(UUID);
   });
 
+  test("user should be able to update a car's mileage, should be succesfull return status 200", async () => {
+    const userData = await request.post("/api/auth/login").send({
+      email: email,
+      password: password,
+    });
+
+    const token = userData.body.token;
+    const UUID = userData.body.user.id;
+
+    await request
+      .post("/api/car/1C4RJFBG5DC522189")
+      .send()
+      .set("Authorization", `Bearer ${token}`);
+
+    const response = await request
+      .put("/api/car/1C4RJFBG5DC522189")
+      .send({
+        mileage: "40000",
+      })
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body.data.vin).toBe("1C4RJFBG5DC522189");
+    expect(response.body.data.mileage).toBe(40000);
+  });
+
+  test("user tries to update a car's mileage with a vin that does not exist, should fail return status 404", async () => {
+    const userData = await request.post("/api/auth/login").send({
+      email: email,
+      password: password,
+    });
+
+    const token = userData.body.token;
+    const UUID = userData.body.user.id;
+
+    const response = await request
+      .put("/api/car/1C4RJFBG5DC522189")
+      .send({
+        mileage: "40000",
+      })
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("car not found");
+  });
+
   test("entering a vin that does not exist, should result in a 404", async () => {
     const userData = await request.post("/api/auth/login").send({
       email: email,

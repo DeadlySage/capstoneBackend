@@ -8,7 +8,7 @@ const createCar = async (req, res, next) => {
     const userId = req.user.id;
 
     // check if user enters a valid vin number, if not return error message
-    if (await isValidVin(vin) == false) {
+    if ((await isValidVin(vin)) == false) {
       return res.status(422).send({
         message: "invalid vin number",
       });
@@ -16,7 +16,13 @@ const createCar = async (req, res, next) => {
 
     // calls NHTSA api to get relavant car information
     const vinDecoded = await decodeVin(vin);
-    const carImg = await getVehicleImg( await getVehicleId(vinDecoded.make, vinDecoded.model, vinDecoded.modelYear))
+    const carImg = await getVehicleImg(
+      await getVehicleId(
+        vinDecoded.make,
+        vinDecoded.model,
+        vinDecoded.modelYear
+      )
+    );
     const response = await prisma.car.create({
       data: {
         vin: vin,
@@ -84,16 +90,52 @@ const getSingleCar = async (req, res, next) => {
 
     const response = await prisma.car.findFirstOrThrow({
       where: {
-        vin: vin
+        vin: vin,
       },
-    })
-    
-    res.status(200).send(response)
+    });
+
+    res.status(200).send(response);
   } catch (error) {
     if (error.code == "P2025") {
       res.status(404).send({
-        message: "car not found"
-      })
+        message: "car not found",
+      });
+    } else {
+      res.status(500).send({
+        message: "Internal server error",
+      });
+    }
+  }
+};
+
+const updateMileage = async (req, res, next) => {
+  try {
+    const vin = req.params.vin;
+    const updatedMileage = req.body.mileage;
+
+    const response = await prisma.car.update({
+      where: {
+        vin: vin,
+      },
+      data: {
+        mileage: parseInt(updatedMileage),
+      },
+    });
+
+    // success condition
+    res.status(200).send({
+      message: "mileage succesfull updated",
+      data: {
+        vin: response.vin,
+        mileage: response.mileage,
+      },
+    });
+  } catch (error) {
+    // fail condition
+    if (error.code == "P2025") {
+      res.status(404).send({
+        message: "car not found",
+      });
     } else {
       res.status(500).send({
         message: "Internal server error",
@@ -133,5 +175,6 @@ module.exports = {
   createCar,
   getAllCar,
   getSingleCar,
+  updateMileage,
   deleteCar,
 };
