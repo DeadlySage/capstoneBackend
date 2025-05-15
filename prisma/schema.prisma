@@ -40,19 +40,21 @@ model Role {
 }
 
 model Car {
-  vin         String       @id
-  carName     String?      @db.VarChar(50)
-  vehicleType String?      @db.VarChar(100)
-  modelYear   Int
-  make        String       @db.VarChar(100)
-  model       String       @db.VarChar(100)
-  bodyClass   String?      @db.VarChar(100)
-  carImg      String?
-  userId      String
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  serviceLog  ServiceLog[]
-  carAccess   CarAccess[]
-  reminder    Reminder[]
+  vin             String            @id
+  carName         String?           @db.VarChar(50)
+  vehicleType     String?           @db.VarChar(100)
+  modelYear       Int
+  make            String            @db.VarChar(100)
+  model           String            @db.VarChar(100)
+  bodyClass       String?           @db.VarChar(100)
+  carImg          String?
+  mileage         Int?
+  userId          String
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  serviceLog      ServiceLog[]
+  carAccess       CarAccess[]
+  reminder        Reminder[]
+  upcomingService UpcomingService[]
 }
 
 model Reminder {
@@ -74,17 +76,57 @@ model CarAccess {
 }
 
 model ServiceLog {
-  id            String   @id @default(uuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  performedAt   DateTime @default(now())
-  mileage       Int
-  serviceBy     String?
-  user          User?    @relation(fields: [serviceBy], references: [id], onDelete: SetNull)
-  serviceCost   Int?
-  serviceType   String   @db.VarChar(100)
-  serviceDetail String?
-  serviceNote   String?
-  carVin        String
-  car           Car      @relation(fields: [carVin], references: [vin], onDelete: Cascade)
+  id                       String           @id @default(uuid())
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime         @updatedAt
+  performedAt              DateTime         @default(now())
+  mileage                  Int
+  serviceBy                String?
+  user                     User?            @relation(fields: [serviceBy], references: [id], onDelete: SetNull)
+  serviceCost              Int?
+  serviceType              String           @db.VarChar(100)
+  serviceDetail            String?
+  serviceNote              String?
+  carVin                   String
+  car                      Car              @relation(fields: [carVin], references: [vin], onDelete: Cascade)
+  completedUpcomingService UpcomingService? @relation("CompletedUpcomingServices")
+}
+
+model ServiceIntervalRule {
+  id                   String  @id @default(uuid())
+  serviceType          String  @unique
+  description          String?
+  defaultIntervalMiles Int?
+  firstOccurrenceMiles Int?
+}
+
+enum UpcomingServiceStatus {
+  ACTIVE
+  SNOOZED
+  COMPLETE
+  DISMISSED
+}
+
+enum UpcomingServiceTriggerReason {
+  MILEAGE_THRESHOLD
+}
+
+model UpcomingService {
+  id                      String                        @id @default(uuid())
+  carVin                  String
+  car                     Car                           @relation(fields: [carVin], references: [vin], onDelete: Cascade)
+  serviceType             String
+  serviceDescription      String
+  targetMileage           Int
+  status                  UpcomingServiceStatus         @default(ACTIVE)
+  snoozedUntilMileage     Int?
+  triggerReason           UpcomingServiceTriggerReason?
+  completedByServiceLogId String?                       @unique
+  completedByServiceLog   ServiceLog?                   @relation("CompletedUpcomingServices", fields: [completedByServiceLogId], references: [id], onDelete: SetNull)
+  createdAt               DateTime                      @default(now())
+  updatedAt               DateTime                      @updatedAt
+
+  @@index([carVin, status])
+  @@index([carVin, serviceType, status])
+  @@index([status, targetMileage])
 }
