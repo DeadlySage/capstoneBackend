@@ -48,4 +48,6 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
+      - run: npm run seed
+
       - run: npm test
