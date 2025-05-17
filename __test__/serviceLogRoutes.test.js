@@ -4,7 +4,7 @@ const request = supertest(app);
 const { prisma } = require("../src/common");
 
 // set the timeout of each test run
-jest.setTimeout(12000);
+jest.setTimeout(15000);
 
 describe("service log Routes", () => {
   // unique test account credentials
@@ -59,7 +59,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -69,7 +69,7 @@ describe("service log Routes", () => {
     expect(response.status).toBe(200);
     expect(response.body.data.mileage).toBe(80000);
     expect(response.body.data.serviceBy).toBe(userId);
-    expect(response.body.data.serviceType).toBe("oil change");
+    expect(response.body.data.serviceType).toBe("EngineOilAndFilterChange");
     expect(response.body.data.serviceCost).toBe(80);
     expect(response.body.data.serviceDetail).toBe("changed oil");
     expect(response.body.data.serviceNote).toBe(
@@ -96,13 +96,13 @@ describe("service log Routes", () => {
       .post(`/api/servicelog/create/car/${testVin}`)
       .send({
         mileage: "80000",
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
       })
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
     expect(response.body.data.mileage).toBe(80000);
-    expect(response.body.data.serviceType).toBe("oil change");
+    expect(response.body.data.serviceType).toBe("EngineOilAndFilterChange");
   });
 
   test("user tries to create a service log without providing a vin, should fail and returns status 400", async () => {
@@ -125,7 +125,7 @@ describe("service log Routes", () => {
       .post(`/api/servicelog/create/car/${invalidTestVin}`)
       .send({
         mileage: "80000",
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
       })
       .set("Authorization", `Bearer ${token}`);
 
@@ -152,7 +152,7 @@ describe("service log Routes", () => {
       .post(`/api/servicelog/create/car/KNDPB3A23B7135414`)
       .send({
         mileage: "80000",
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
       })
       .set("Authorization", `Bearer ${token}`);
 
@@ -178,7 +178,7 @@ describe("service log Routes", () => {
     const response = await request
       .post(`/api/servicelog/create/car/${testVin}`)
       .send({
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
       })
       .set("Authorization", `Bearer ${token}`);
 
@@ -232,7 +232,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -244,7 +244,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "81000",
         serviceBy: userId,
-        serviceType: "tire change",
+        serviceType: "TireRotation",
         serviceCost: "1500",
         serviceDetail: "changed all four tires",
       })
@@ -299,7 +299,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -311,7 +311,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "81000",
         serviceBy: userId,
-        serviceType: "tire change",
+        serviceType: "TireRotation",
         serviceCost: "1500",
         serviceDetail: "changed all four tires",
       })
@@ -327,7 +327,7 @@ describe("service log Routes", () => {
     expect(response.status).toBe(200);
     expect(response.body.data.mileage).toBe(81000);
     expect(response.body.data.serviceBy).toBe(userId);
-    expect(response.body.data.serviceType).toBe("tire change");
+    expect(response.body.data.serviceType).toBe("TireRotation");
     expect(response.body.data.serviceCost).toBe(1500);
     expect(response.body.data.serviceDetail).toBe("changed all four tires");
   });
@@ -399,7 +399,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -414,10 +414,11 @@ describe("service log Routes", () => {
         performedAt: "2025-05-13T12:00:00.000Z",
         mileage: "83000",
         serviceBy: null,
-        serviceType: "replace wheel",
+        serviceType: "breakPadsChange",
         serviceCost: "1500",
-        serviceDetail: "replaced all 4 wheels with winter tires",
-        serviceNote: "back left wheel rim is slightly damaged, its recomended to replace it with a new one",
+        serviceDetail: "replaced all 4 break pads",
+        serviceNote:
+          "back left wheel rim is slightly damaged, its recomended to replace it with a new one",
       })
       .set("Authorization", `Bearer ${token}`);
 
@@ -446,7 +447,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -487,7 +488,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -514,7 +515,7 @@ describe("service log Routes", () => {
     const token = userData.body.token;
     const userId = userData.body.user.id;
 
-    const serviceLogId = "23f4bf38-a4c0-4cb4-a362-f18f1899f58a"
+    const serviceLogId = "23f4bf38-a4c0-4cb4-a362-f18f1899f58a";
 
     const response = await request
       .put(`/api/servicelog/updateServiceLog/${serviceLogId}`)
@@ -548,7 +549,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -586,7 +587,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",
@@ -625,7 +626,7 @@ describe("service log Routes", () => {
       .send({
         mileage: "80000",
         serviceBy: userId,
-        serviceType: "oil change",
+        serviceType: "EngineOilAndFilterChange",
         serviceCost: "80",
         serviceDetail: "changed oil",
         serviceNote: "oil filter needs to be changed",

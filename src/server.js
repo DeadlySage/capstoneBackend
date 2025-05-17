@@ -22,12 +22,14 @@ const userRoutes = require("./api/userRoutes");
 const carRoutes = require("./api/carRoutes");
 const reminderRoutes = require("./api/reminderRoutes.js");
 const serviceLogRoutes = require("./api/serviceLogRoutes.js");
+const upcomingServiceRoutes = require("./api/upcomingServiceRoutes.js");
 
 app.use("/api/auth", apiRouter);
 app.use("/api/user", userRoutes);
 app.use("/api/car", carRoutes);
 app.use("/api/reminder", reminderRoutes);
 app.use("/api/servicelog", serviceLogRoutes);
+app.use("/api/upcomingService", upcomingServiceRoutes);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

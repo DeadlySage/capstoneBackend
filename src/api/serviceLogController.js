@@ -1,4 +1,10 @@
 const { prisma } = require("../common");
+const {
+  linkUpcomingServiceToServiceLog,
+  autoCompleteUpcomingService,
+  updateCarMileageIfHigher,
+  createNewUpcomingService,
+} = require("./upcomingServiceScheduler");
 
 const createServiceLog = async (req, res, next) => {
   try {
@@ -53,6 +59,24 @@ const createServiceLog = async (req, res, next) => {
     const response = await prisma.serviceLog.create({
       data: serviceLogData,
     });
+
+    if (response.id !== null && vin !== null) {
+      // link service log to a upcoming service
+      await linkUpcomingServiceToServiceLog(
+        vin,
+        response.id,
+        response.serviceType
+      );
+
+      // check upcoming services for auto complete
+      await autoCompleteUpcomingService(vin);
+
+      // update the mileage in car table if service log mileage is greater
+      await updateCarMileageIfHigher(vin, parseInt(mileage));
+
+      // after updating car mileage, check if this car needs new upcoming services
+      await createNewUpcomingService(vin, parseInt(mileage));
+    }
 
     // success condition
     res.status(200).send({
@@ -186,6 +210,32 @@ const updateServiceLog = async (req, res, next) => {
       },
       data: updateServiceLogData,
     });
+
+    /*
+    work in progress, current issue: when a user changes the serviceType it does not remove 1 to 1 relationship
+
+    // if user updates serviceType field
+    if (response && serviceType !== undefined) {
+      // link service log to a upcoming service
+      await linkUpcomingServiceToServiceLog(
+        response.carVin,
+        response.id,
+        response.serviceType
+      );
+
+      // check upcoming services for auto complete
+      await autoCompleteUpcomingService(response.carVin);
+    }
+
+    // if user updates mileage field
+    if (response && mileage !== undefined) {
+      // update the mileage in car table if service log mileage is greater
+      await updateCarMileageIfHigher(response.carVin, response.mileage);
+
+      // after updating car mileage, check if this car needs new upcoming services
+      await createNewUpcomingService(vin, parseInt(mileage));
+    }
+    */
 
     // success condition
     res.status(200).send({
