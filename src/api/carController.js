@@ -1,5 +1,6 @@
 const { prisma } = require("../common");
 const { getVehicleImg, getVehicleId } = require("./nhtsaService");
+const { createNewUpcomingService } = require("./upcomingServiceScheduler");
 const { decodeVin, isValidVin } = require("./vinDecoder");
 
 const createCar = async (req, res, next) => {
@@ -122,6 +123,11 @@ const updateMileage = async (req, res, next) => {
       },
     });
 
+    if (response.vin !== null) {
+      // checks and creates any required upcomming reminders based on the new mileage
+      await createNewUpcomingService(vin, updatedMileage);
+    }
+
     // success condition
     res.status(200).send({
       message: "mileage succesfull updated",
@@ -150,7 +156,7 @@ const deleteCar = async (req, res, next) => {
     const userId = req.user.id;
 
     // check if user enters a valid vin number, if not return error message
-    if (isValidVin(vin) == false) {
+    if (await isValidVin(vin) == false) {
       return res.status(422).send({
         message: "invalid vin number",
       });

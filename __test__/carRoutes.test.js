@@ -245,4 +245,25 @@ describe("car routes", () => {
 
     expect(response.status).toBe(204);
   });
+
+  test("user tries to delete a car with an invalid vin, should fail return 422", async () => {
+    const userData = await request.post("/api/auth/login").send({
+      email: email,
+      password: password,
+    });
+
+    const token = userData.body.token;
+
+    await request
+      .post("/api/car/1C4RJFBG5DC522189")
+      .send()
+      .set("Authorization", `Bearer ${token}`);
+
+    const response = await request
+      .delete("/api/car/1")
+      .send()
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.status).toBe(422);
+  });
 });
