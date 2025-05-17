@@ -32,7 +32,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
       - run: npm i
 
       - name: Set environment variables from GitHub Secrets
