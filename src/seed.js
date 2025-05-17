@@ -1,12 +1,31 @@
 import { PrismaClient } from "../generated/prisma/client.js";
 const prisma = new PrismaClient();
 
+// seed Role table with defaults
+const getRoles = await prisma.role.findMany();
+
+if (getRoles.length == 0) {
+  await prisma.role.createMany({
+    data: [
+      {
+        role: "user",
+      },
+      {
+        role: "mechanic",
+      },
+      {
+        role: "admin",
+      },
+    ],
+  });
+}
+
 // ServiceIntervalRule defaults
 await prisma.serviceIntervalRule.deleteMany();
 
 await prisma.serviceIntervalRule.createMany({
   data: [
-    { 
+    {
       serviceType: "EngineOilAndFilterChange",
       description:
         "Replaces engine oil and filter to lubricate engine components, reduce friction, and remove contaminants. Essential for engine health and performance. Interval can vary significantly with oil type (conventional/synthetic) and vehicle model.",
