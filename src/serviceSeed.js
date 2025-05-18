@@ -17,7 +17,7 @@ await prisma.serviceIntervalRule.createMany({
       defaultIntervalMiles: 7500,
     },
     {
-      serviceType: "Replaceme Air Filter",
+      serviceType: "Replace Air Filter",
       description:
         "Replacing the air filter helps ensure optimal air flow to the engine, improving fuel efficiency and reducing engine strain. The interval can vary depending on driving conditions, particularly in dusty environments.",
       defaultIntervalMiles: 12000,
