@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon src/index.js",
+    "seed": "node src/seed.js",
     "heroku-postbuild": "npm install && npx prisma migrate deploy && npx prisma generate",
     "test": "jest --maxWorkers=2",
     "slowTest": "jest --maxWorkers=1",

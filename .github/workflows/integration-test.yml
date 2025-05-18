@@ -1,0 +1,53 @@
+name: integration test
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U test_user -d test_db" 
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm i
+
+      - name: Set environment variables from GitHub Secrets
+        run: |
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+          echo "BCRYPT_SALT=${{ secrets.BCRYPT_SALT }}" >> $GITHUB_ENV
+          echo "NHTSA_API_URL=${{ secrets.NHTSA_API_URL }}" >> $GITHUB_ENV
+          echo "NHTSA_API_URL_2=${{ secrets.NHTSA_API_URL_2 }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=postgresql://test_user:test_password@localhost:5432/test_db" >> $GITHUB_ENV
+
+      - name: Run Prisma Migrations
+        run: npx prisma migrate deploy
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - run: npm run seed
+
+      - run: npm test
