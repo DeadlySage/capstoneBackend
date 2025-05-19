@@ -5,7 +5,7 @@
   "scripts": {
     "server": "nodemon src/index.js",
     "seed": "node src/seed.js",
-    "heroku-postbuild": "npm install && npx prisma migrate deploy && npx prisma generate",
+    "heroku-postbuild": "npm install && npx prisma migrate deploy && npx prisma generate && npm run seed",
     "test": "jest --maxWorkers=2",
     "slowTest": "jest --maxWorkers=1",
     "test:watch": "jest --maxWorkers=2 --watch"

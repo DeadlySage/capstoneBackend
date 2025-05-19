@@ -76,7 +76,7 @@ describe("upcoming service Routes", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(checkUpcomingService.status).toBe(200);
-    expect(checkUpcomingService.body.data.length).toBe(3);
+    expect(checkUpcomingService.body.data.length).toBe(8);
   });
 
   test("user tries to get all upcoming services without proving a vin, should fail return 400", async () => {

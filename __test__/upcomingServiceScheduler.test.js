@@ -82,7 +82,7 @@ describe("upcoming Service Scheduler function tests", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(response.body.data.length).toBe(3);
+    expect(response.body.data.length).toBe(8);
     expect(response.body.data[0].carVin).toBe(testVin);
     expect(response.body.data[0].serviceType).toBe(
       serviceIntervaldefaults[0].serviceType
@@ -195,7 +195,7 @@ describe("upcoming Service Scheduler function tests", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(checkUpcomingService.status).toBe(200);
-    expect(checkUpcomingService.body.data.length).toBe(3);
+    expect(checkUpcomingService.body.data.length).toBe(8);
 
     // user updates mileage of car to trigger 2 of the 3 upcoming service entries
     await request
@@ -254,6 +254,6 @@ describe("upcoming Service Scheduler function tests", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(checkUpcomingServiceNew.status).toBe(200);
-    expect(checkUpcomingServiceNew.body.data.length).toBe(3);
+    expect(checkUpcomingServiceNew.body.data.length).toBe(8);
   });
 });
