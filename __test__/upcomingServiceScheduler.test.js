@@ -24,7 +24,11 @@ describe("upcoming Service Scheduler function tests", () => {
   let serviceIntervaldefaults;
 
   beforeAll(async () => {
-    serviceIntervaldefaults = await prisma.serviceIntervalRule.findMany();
+    serviceIntervaldefaults = await prisma.serviceIntervalRule.findMany({
+      orderBy: {
+        createOrderIndex: "asc",
+      },
+    });
   });
 
   // create test account before each test

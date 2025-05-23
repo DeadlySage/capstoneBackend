@@ -62,7 +62,10 @@ const getAllUpcomingService = async (req, res, next) => {
         status: {
           in: [UpcomingServiceStatus.ACTIVE, UpcomingServiceStatus.SNOOZED],
         },
-      }
+      },
+      orderBy: {
+        targetMileage: 'asc',
+      },
     });
 
     // succes condition
