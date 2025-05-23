@@ -93,12 +93,12 @@ model ServiceLog {
 }
 
 model ServiceIntervalRule {
-  id                   String   @id @default(uuid())
-  serviceType          String   @unique
+  id                   String  @id @default(uuid())
+  serviceType          String  @unique
   description          String?
   defaultIntervalMiles Int?
   firstOccurrenceMiles Int?
-  createdAt            DateTime @default(now())
+  createOrderIndex     Int?
 }
 
 enum UpcomingServiceStatus {

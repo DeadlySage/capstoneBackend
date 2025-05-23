@@ -26,7 +26,7 @@ describe("upcoming Service Scheduler function tests", () => {
   beforeAll(async () => {
     serviceIntervaldefaults = await prisma.serviceIntervalRule.findMany({
       orderBy: {
-        createdAt: "asc",
+        createOrderIndex: "asc",
       },
     });
   });
